@@ -22,10 +22,10 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
   const serviceCollection = client.db("luxury").collection("item");
+  const orderCollection = client.db("luxury").collection("order");
 
   app.post('/addEvent',(req,res)=>{
     const newEvent = req.body;
-    console.log('adding new event:',newEvent);
     serviceCollection.insertOne(newEvent)
     .then(result =>{
         console.log('insertedCount:', result.insertedCount);
@@ -35,7 +35,6 @@ client.connect(err => {
 
   app.post('/addEmail',(req,res)=>{
     const newEmail = req.body;
-    console.log(newEmail);
     serviceCollection.insertOne(newEmail)
     .then(result =>{
         console.log('insertedCount:', result.insertedCount);
@@ -55,6 +54,16 @@ client.connect(err => {
     const id = ObjectID(req.params.id);
     serviceCollection.findOneAndDelete({_id: id})
     .then(documents => res.send(!! documents.value))
+})
+
+app.post('/addOrder',(req,res)=>{
+  const newOrder = req.body;
+  console.log(newOrder);
+  orderCollection.insertOne(newOrder)
+  .then(result =>{
+      console.log(result);
+  })
+  console.log(newOrder);
 })
 
 
