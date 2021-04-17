@@ -23,6 +23,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
   const serviceCollection = client.db("luxury").collection("item");
   const orderCollection = client.db("luxury").collection("order");
+  const reviewCollection = client.db("luxury").collection("review");
 
   app.post('/addEvent',(req,res)=>{
     const newEvent = req.body;
@@ -64,6 +65,35 @@ app.post('/addOrder',(req,res)=>{
       console.log(result);
   })
   console.log(newOrder);
+})
+
+app.get('/getOrder',(req,res)=>{
+  orderCollection.find({email : req.query.email})
+  .toArray((err,items)=>{
+    console.log(err);
+    res.send(items);
+  })
+})
+
+
+app.post('/addReview',(req,res)=>{
+  const newReview = req.body;
+  console.log(newReview);
+  reviewCollection.insertOne(newReview)
+  .then(result =>{
+      console.log(result);
+  })
+  console.log(newReview);
+})
+
+
+app.get('/getReview',(req,res)=>{
+  reviewCollection.find({}).limit(3)
+  .toArray((err,document)=>{
+    console.log('mehedi',document);
+    console.log(err);
+    res.send(document);
+  })
 })
 
 
