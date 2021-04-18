@@ -75,6 +75,13 @@ app.get('/getOrder',(req,res)=>{
   })
 })
 
+app.get('/getAllOrder',(req,res)=>{
+  orderCollection.find({})
+  .toArray((err,documents)=>{
+    console.log(err);
+    res.send(documents);
+  })
+})
 
 app.post('/addReview',(req,res)=>{
   const newReview = req.body;
